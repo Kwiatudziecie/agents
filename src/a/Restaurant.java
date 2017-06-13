@@ -72,7 +72,6 @@ public class Restaurant extends Agent {
 	            	}
 		            msg.setLanguage(Const.Language());
 		            msg.setContent(new AgentHelper(getLocalName(), x, y, type, food).toString());
-		            msg.setPerformative(ACLMessage.INFORM);
 		            myAgent.send(msg);
 		    		logger.info("Inform message sent");
 	            	
@@ -91,8 +90,14 @@ public class Restaurant extends Agent {
 				if (msg != null) {
 					for(DFAgentDescription b:banks){
 		            	if(msg.getSender().equals(b.getName())){
-							food-=Integer.parseInt(msg.getContent().toString());
+		            		int amount = new AgentHelper().food(msg.getContent());
+							food-=amount;
 				    		logger.info("Restaurant sent food");
+			            	ACLMessage foodtruck = new ACLMessage(ACLMessage.CONFIRM);
+			            	foodtruck.addReceiver(new AID(new AgentHelper().client(msg.getContent()), AID.ISLOCALNAME));
+			            	foodtruck.setLanguage(Const.Language());
+			            	foodtruck.setContent(Integer.toString(amount));
+			            	send(foodtruck);
 				    	}
 		            }
 				} else {

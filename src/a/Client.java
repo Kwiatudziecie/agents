@@ -62,7 +62,7 @@ public class Client extends Agent {
 			private static final long serialVersionUID = 1L;
 
 			protected void onTick() {
-				if(rand.nextInt(7)==0){
+				if(rand.nextInt(7)==0){//frequency
 					try {
 						banks = DFService.search(myAgent, AgentsUtils.getDFD(AgentsUtils.getSD(Const.Bank())));
 					} catch (FIPAException e) {
@@ -87,24 +87,27 @@ public class Client extends Agent {
 			Behaviour listener = (new CyclicBehaviour(this) {
 				@Override
 				public void action() {
-					MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(Const.Language()),
-							MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
+					MessageTemplate mt = MessageTemplate.MatchLanguage(Const.Language());
 					ACLMessage msg = myAgent.receive(mt);
 								
 					if (msg != null) {
-		            	for(DFAgentDescription b:banks){
+						if(msg.getPerformative()==ACLMessage.CONFIRM){
+							food-=Integer.parseInt(msg.getContent());
+				    		logger.info("Food received! Saved "+Integer.parseInt(msg.getContent())+"kg.");
+						}
+						else if(msg.getPerformative()==ACLMessage.PROPOSE){
+			         	for(DFAgentDescription b:banks){
 			            	if(msg.getSender().equals(b.getName()))
 			            	{
-				            	int old = food;
-								food-=Integer.parseInt(msg.getContent());
-								if(food<0)
-									food=0;
+				            	int amount = food < Integer.parseInt(msg.getContent())? food : Integer.parseInt(msg.getContent());
 								 ACLMessage response = msg.createReply();
 								 response.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-								 response.setContent("" + old);
+								 response.setContent(new AgentHelper().Query(amount, getLocalName()));
 								 send(response);}}
-						 } else {
+						}
+						} else {
 						block();
+						
 					}
 				}
 			});

@@ -14,6 +14,9 @@ public class AgentHelper {
 	public double y;
 	public int type;
 	public int food;
+	public AgentHelper(){
+		Name=null; x=0; y=0; type=0; food=0;
+	}
 	public AgentHelper(String name, double _x, double _y, int _type, int _food){
 		Name=name; x=_x; y=_y; type=_type; food=_food;
 	}
@@ -47,6 +50,37 @@ public class AgentHelper {
 		+y+";type"+splitter()
 		+type+";quantity"+splitter()
 		+food);
+	}
+	public String Query(int _food, String _name){
+		return new String("name"+splitter()
+		+_name+";quantity"+splitter()
+		+_food);
+	}
+	public String client(String query){
+		String[] parts = query.split(";");
+		for(int i=0;i<parts.length; i++){
+			String[] field = parts[i].split(splitterEncoded());
+			if(field.length==2){
+				if(field[0].equals("name"))
+					return field[1];
+				}
+			else
+				logger.log(Logger.SEVERE, "not recognized query: " + query);
+		}
+		return new String();
+	}
+	public int food(String query){
+		String[] parts = query.split(";");
+		for(int i=0;i<parts.length; i++){
+			String[] field = parts[i].split(splitterEncoded());
+			if(field.length==2){
+				if(field[0].equals("quantity"))
+					return Integer.parseInt(field[1]);
+				}
+			else
+				logger.log(Logger.SEVERE, "not recognized query: " + query);
+		}
+		return 0;
 	}
 	private String splitter(){
 		return "|";
