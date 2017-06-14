@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -29,11 +33,21 @@ public class FoodBank extends Agent {
 	
 	Map<AgentHelper, AgentHelper> dictionary = new HashMap<AgentHelper, AgentHelper>();
 
+	 private Codec codec = new SLCodec();
+	   private Ontology ontology = HelpOntology.getInstance();
 	
 	@Override
 	protected void setup() {
+		
+		getContentManager().registerLanguage(codec);
+	      getContentManager().registerOntology(ontology);
+		
+		
+		
+		
 		restaurants = new ArrayList<AgentHelper>();
 		clients = new ArrayList<AgentHelper>();
+		//getContentManager().registerLanguage(new );
 		AgentsUtils.registerAgent(this, Const.Bank());//yellow pages
 		logger.info("Bank registered");
 		CyclicBehaviour listener = new CyclicBehaviour(this) {

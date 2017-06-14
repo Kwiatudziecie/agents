@@ -1,4 +1,5 @@
 package a;
+import java.io.Console;
 import java.util.Random;
 import jade.core.AID;
 import jade.core.Agent;
@@ -90,14 +91,7 @@ public class Restaurant extends Agent {
 				if (msg != null) {
 					for(DFAgentDescription b:banks){
 		            	if(msg.getSender().equals(b.getName())){
-		            		int amount = new AgentHelper().food(msg.getContent());
-							food-=amount;
-				    		logger.info("Restaurant sent food");
-			            	ACLMessage foodtruck = new ACLMessage(ACLMessage.CONFIRM);
-			            	foodtruck.addReceiver(new AID(new AgentHelper().client(msg.getContent()), AID.ISLOCALNAME));
-			            	foodtruck.setLanguage(Const.Language());
-			            	foodtruck.setContent(Integer.toString(amount));
-			            	send(foodtruck);
+		            		foodtruck(new AgentHelper().food(msg.getContent()), new AgentHelper().client(msg.getContent()));
 				    	}
 		            }
 				} else {
@@ -106,6 +100,18 @@ public class Restaurant extends Agent {
 			}
 		});
 		addBehaviour(listener);
+
 		
 	}
+	private void foodtruck(int amount, String client){
+		food-=amount;
+		logger.info("Restaurant sent food");
+    	ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
+    	msg.addReceiver(new AID(client, AID.ISLOCALNAME));
+    	msg.setLanguage(Const.Language());
+    	msg.setContent(Integer.toString(amount));
+    	send(msg);
+		}
+		
+	
 }
