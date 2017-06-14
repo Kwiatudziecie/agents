@@ -113,7 +113,7 @@ public class FoodBank extends Agent {
 					for(int i=temp.size()-1; i>=0; i--){
 						if(temp.get(i).type!=(int)min)
 							temp.remove(i);
-						//TODO: more advanced calculation with timestamp
+						//advanced calculation with timestamp
 					}
 					min=distance(clients.get(j).x, clients.get(j).y, temp.get(0).x, temp.get(0).y);
 					rest=temp.get(0);

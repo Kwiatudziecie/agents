@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -93,7 +95,8 @@ public class Client extends Agent {
 					if (msg != null) {
 						if(msg.getPerformative()==ACLMessage.CONFIRM){
 							food-=Integer.parseInt(msg.getContent());
-				    		logger.info("Food received! Saved "+Integer.parseInt(msg.getContent())+"kg.");
+							System.out.println("Food received! Saved "+Integer.parseInt(msg.getContent())+"kg.");
+							JOptionPane.showMessageDialog(null,"Food received! Saved "+Integer.parseInt(msg.getContent())+"kg.");
 						}
 						else if(msg.getPerformative()==ACLMessage.PROPOSE){
 			         	for(DFAgentDescription b:banks){

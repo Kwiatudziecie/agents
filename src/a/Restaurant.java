@@ -105,7 +105,7 @@ public class Restaurant extends Agent {
 	}
 	private void foodtruck(int amount, String client){
 		food-=amount;
-		logger.info("Restaurant sent food");
+		System.out.println("Restaurant sent food");
     	ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
     	msg.addReceiver(new AID(client, AID.ISLOCALNAME));
     	msg.setLanguage(Const.Language());
